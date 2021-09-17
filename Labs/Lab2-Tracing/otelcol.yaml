@@ -29,10 +29,6 @@ processors:
     limit_mib: 1900
     # The queued_retry processor uses a bounded queue to relay batches from the receiver or previous
     # processor to the next processor.
-  batch:
-    send_batch_size: 256
-    send_batch_max_size: 512
-    timeout: 5s
 extensions:
   health_check: {}
 exporters:
@@ -49,7 +45,7 @@ service:
   pipelines:
     traces:
       receivers: [jaeger, otlp, zipkin]
-      processors: [memory_limiter, batch]
+      processors: [memory_limiter]
       exporters: [logging, jaeger, otlphttp]
     metrics:
       receivers: [otlp]

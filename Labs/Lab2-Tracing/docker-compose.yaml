@@ -45,7 +45,7 @@ services:
     environment:
       - OTEL_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=https://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-bar
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
     image: sumo/the-coffee-bar-app:js-apps
@@ -65,9 +65,9 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
       - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
-    #  - REACT_APP_SUMO_OT_JS_URL="https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
-    #  - REACT_APP_COLLECTION_SOURCE_URL="https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3b3tyMzt3_aukufAKFTBYVkxoXY-rUbCajbI4WVhCWVMIo573UmeRM9FfQwQ_ek7qucKCAdEqqFDtNId6G5dqojhrjKAlQUATEUWw3mOhRTA=="
-    #  - REACT_APP_APPLICATION_NAME=tcb-local-lab1
+      - REACT_APP_SUMO_OT_JS_URL="https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
+      - REACT_APP_COLLECTION_SOURCE_URL="https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3b3tyMzt3_aukufAKFTBYVkxoXY-rUbCajbI4WVhCWVMIo573UmeRM9FfQwQ_ek7qucKCAdEqqFDtNId6G5dqojhrjKAlQUATEUWw3mOhRTA=="
+      - REACT_APP_APPLICATION_NAME=tcb-local-lab2
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-machine
@@ -80,20 +80,20 @@ services:
     environment:
       - OTEL_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=https://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-machine
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=the-coffee-machine
   the-cashdesk:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-cashdesk
     hostname: the-cashdesk
     ports:
       - 8084:8084
-    command: ["python3", "src/bin/the_cashdesk.py",
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_cashdesk.py",
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
     environment:
       - OTEL_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-cashdesk
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=the-cashdesk
   the-coffee-lover:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-lover
@@ -103,7 +103,7 @@ services:
     environment:
       - OTEL_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-lover
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=the-coffee-lover
   machine-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: machine-svc
@@ -114,7 +114,7 @@ services:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
       - OTEL_EXPORTER_OTLP_INSECURE=true
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=machine-svc
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=machine-svc
   coffee-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: coffee-svc
@@ -125,7 +125,7 @@ services:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
       - OTEL_EXPORTER_OTLP_INSECURE=true
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=coffee-svc
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=coffee-svc
   water-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: water-svc
@@ -137,7 +137,7 @@ services:
       - OTEL_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
       - OTEL_EXPORTER_OTLP_INSECURE=true
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=water-svc
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=water-svc
   calculator-svc:
     image: sumo/the-coffee-bar-app:calculator-dotnet
     container_name: calculator-svc
@@ -146,7 +146,7 @@ services:
     environment:
       - EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=calculator-svc,application=tcb-local-lab1
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=calculator-svc,application=tcb-local-lab2
     ports:
       - 8090:8090
   otelcol:
