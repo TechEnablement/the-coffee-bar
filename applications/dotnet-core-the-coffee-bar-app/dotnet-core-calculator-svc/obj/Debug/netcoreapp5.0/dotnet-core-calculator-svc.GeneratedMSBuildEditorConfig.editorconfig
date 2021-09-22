@@ -1,0 +1,10 @@
+is_global = true
+build_property.TargetFramework = netcoreapp5.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.PublishSingleFile = 
+build_property.IncludeAllContentForSelfExtract = 
+build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
+build_property.RootNamespace = dotnet_core_calculator_svc
+build_property.ProjectDir = /Users/wgodard/SampleApps/int-coffee/the-coffee-bar/applications/dotnet-core-the-coffee-bar-app/dotnet-core-calculator-svc/
