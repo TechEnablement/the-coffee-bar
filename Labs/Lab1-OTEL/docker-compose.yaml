@@ -11,25 +11,6 @@ services:
       - 5432:5432
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
-#  clicker:
-#    image: sumo/the-coffee-bar-app:clicker-linux
-#    container_name: clicker
-#    hostname: clicker
-#    environment:
-#      COFFEE_BAR_UI_URL: "http://the-coffee-bar-frontend:3000"
-#      DELAY: "10"
-#      PUPPETEER_PRODUCT: "chrome"
-#      DEBUG_DUMPIO: 'false'
-#    cap_add:
-#      - SYS_ADMIN
-#    command: ["node", "src/clicker.js", "http://the-coffee-bar-frontend:3000"]
-#    depends_on:
-#      - the-coffee-bar
-#      - the-coffee-bar-frontend
-#    ports:
-#      - 9222:9222
-#    expose:
-#      - 9222
   the-coffee-bar:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-bar
@@ -38,15 +19,15 @@ services:
       - 8082:8082
     expose:
       - 8082
-    command: ["opentelemetry-instrument", "the-coffee-bar",
+    command: ["the-coffee-bar",
               "--host=the-coffee-bar", "--port=8082", "--coffeemachine-host=the-coffee-machine",
               "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
  #             ,"--sweets-url=LAMBDA_RUL_HERE"]
-    environment:
-      - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=https://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-bar
-      - OTEL_PROPAGATORS=xray,tracecontext,baggage
+    #environment:
+    #  - OTEL_EXPORTER=otlp
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-bar
+    #  - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
     image: sumo/the-coffee-bar-app:js-apps
     container_name: the-coffee-bar-frontend
@@ -63,10 +44,10 @@ services:
       - DURATION=1
       - THREADS_NO=500
       - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
-      - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
-    #  - REACT_APP_SUMO_OT_JS_URL="https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
-    #  - REACT_APP_COLLECTION_SOURCE_URL="https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3b3tyMzt3_aukufAKFTBYVkxoXY-rUbCajbI4WVhCWVMIo573UmeRM9FfQwQ_ek7qucKCAdEqqFDtNId6G5dqojhrjKAlQUATEUWw3mOhRTA=="
+    #  - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
+    #  - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
+    #  - REACT_APP_SUMO_OT_JS_URL=https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js
+    #  - REACT_APP_COLLECTION_SOURCE_URL=https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3b3tyMzt3_aukufAKFTBYVkxoXY-rUbCajbI4WVhCWVMIo573UmeRM9FfQwQ_ek7qucKCAdEqqFDtNId6G5dqojhrjKAlQUATEUWw3mOhRTA==
     #  - REACT_APP_APPLICATION_NAME=tcb-local-lab1
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps
@@ -74,13 +55,13 @@ services:
     hostname: the-coffee-machine
     ports:
       - 8083:8083
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py",
+    command: ["python3", "src/bin/the_coffee_machine.py",
               "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
               "--machine-svc-port=9090"]
-    environment:
-      - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=https://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-machine
+    #environment:
+    #  - OTEL_EXPORTER=otlp
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-machine
   the-cashdesk:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-cashdesk
@@ -90,20 +71,20 @@ services:
     command: ["python3", "src/bin/the_cashdesk.py",
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
-    environment:
-      - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-cashdesk
+    #environment:
+    #  - OTEL_EXPORTER=otlp
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-cashdesk
   the-coffee-lover:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-lover
     hostname: the-coffee-lover
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",
+    command: ["python3", "src/bin/the_coffee_lover.py",
               "--host=the-coffee-bar", "--port=8082", "--ratio=1"]
-    environment:
-      - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-lover
+    #environment:
+    #  - OTEL_EXPORTER=otlp
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=the-coffee-lover
   machine-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: machine-svc
@@ -111,10 +92,10 @@ services:
     ports:
       - 9090:9090
     command: ["ruby", "/app/lib/machine.rb"]
-    environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
-      - OTEL_EXPORTER_OTLP_INSECURE=true
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=machine-svc
+    #environment:
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+    #  - OTEL_EXPORTER_OTLP_INSECURE=true
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=machine-svc
   coffee-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: coffee-svc
@@ -122,10 +103,10 @@ services:
     ports:
       - 9091:9091
     command: ["ruby", "/app/lib/coffee.rb"]
-    environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
-      - OTEL_EXPORTER_OTLP_INSECURE=true
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=coffee-svc
+    #environment:
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+    #  - OTEL_EXPORTER_OTLP_INSECURE=true
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=coffee-svc
   water-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: water-svc
@@ -133,43 +114,43 @@ services:
     ports:
       - 9092:9092
     command: ["ruby", "/app/lib/water.rb"]
-    environment:
-      - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
-      - OTEL_EXPORTER_OTLP_INSECURE=true
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=water-svc
+    #environment:
+    #  - OTEL_EXPORTER=otlp
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+    #  - OTEL_EXPORTER_OTLP_INSECURE=true
+    #  - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab1,service.name=water-svc
   calculator-svc:
     image: sumo/the-coffee-bar-app:calculator-dotnet
     container_name: calculator-svc
     hostname: calculator-svc
     command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
-    environment:
-      - EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=calculator-svc,application=tcb-local-lab1
+    #environment:
+    #  - EXPORTER=otlp
+    #  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+    #  - OTEL_RESOURCE_ATTRIBUTES=service.name=calculator-svc,application=tcb-local-lab1
     ports:
       - 8090:8090
-  otelcol:
-    image: public.ecr.aws/sumologic/opentelemetry-collector:latest
-    container_name: otelcol
-    hostname: otelcol
-    command: ["--config=/etc/otel-collector-config_otlp.yaml"]
-    volumes:
-        - ./otelcol.yaml:/etc/otel-collector-config_otlp.yaml
-    ports:
-      - "6831:6831"
-      - "14251:14251"
-      - "4317:4317"
-      - "55680:55680"
-      - "55681:55681"
-      - "14268:14268"
-      - "9411:9411"
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: jaeger
-    hostname: jaeger
-    ports:
-      - "16686:16686"
-      - "14250:14250"
-    expose:
-      - 16686
+  #otelcol:
+  #  image: public.ecr.aws/sumologic/opentelemetry-collector:latest
+  #  container_name: otelcol
+  #  hostname: otelcol
+  #  command: ["--config=/etc/otel-collector-config_otlp.yaml"]
+  #  volumes:
+  #      - ./otelcol.yaml:/etc/otel-collector-config_otlp.yaml
+  #  ports:
+  #    - "6831:6831"
+  #    - "14251:14251"
+  #    - "4317:4317"
+  #    - "55680:55680"
+  #    - "55681:55681"
+  #    - "14268:14268"
+  #    - "9411:9411"
+  #jaeger:
+  #  image: jaegertracing/all-in-one:latest
+  #  container_name: jaeger
+  #  hostname: jaeger
+  #  ports:
+  #    - "16686:16686"
+  #    - "14250:14250"
+  #  expose:
+  #    - 16686
