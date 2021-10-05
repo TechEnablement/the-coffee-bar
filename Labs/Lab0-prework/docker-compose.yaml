@@ -57,12 +57,6 @@ services:
     command: ["python3", "src/bin/the_cashdesk.py",
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
-  the-coffee-lover:
-    image: sumo/the-coffee-bar-app:python-apps
-    container_name: the-coffee-lover
-    hostname: the-coffee-lover
-    command: ["python3", "src/bin/the_coffee_lover.py",
-              "--host=the-coffee-bar", "--port=8082", "--ratio=1"]
   machine-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: machine-svc
@@ -91,4 +85,3 @@ services:
     command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
     ports:
       - 8090:8090
-  

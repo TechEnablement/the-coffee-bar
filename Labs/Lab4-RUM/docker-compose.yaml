@@ -46,8 +46,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
       - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
-      - REACT_APP_SUMO_OT_JS_URL=https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js
-      - REACT_APP_COLLECTION_SOURCE_URL=https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3b3tyMzt3_aukufAKFTBYVkxoXY-rUbCajbI4WVhCWVMIo573UmeRM9FfQwQ_ek7qucKCAdEqqFDtNId6G5dqojhrjKAlQUATEUWw3mOhRTA==
+      - REACT_APP_SUMO_OT_JS_URL=
+      - REACT_APP_COLLECTION_SOURCE_URL=
       - REACT_APP_APPLICATION_NAME=tcb-local-lab4
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps

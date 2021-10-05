@@ -45,10 +45,6 @@ services:
       - THREADS_NO=500
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
-      - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
-      - REACT_APP_SUMO_OT_JS_URL=https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js
-      - REACT_APP_COLLECTION_SOURCE_URL=https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3b3tyMzt3_aukufAKFTBYVkxoXY-rUbCajbI4WVhCWVMIo573UmeRM9FfQwQ_ek7qucKCAdEqqFDtNId6G5dqojhrjKAlQUATEUWw3mOhRTA==
-      - REACT_APP_APPLICATION_NAME=tcb-local-lab2
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-machine
@@ -68,13 +64,9 @@ services:
     hostname: the-cashdesk
     ports:
       - 8084:8084
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_cashdesk.py",
+    command: ["python3", "src/bin/the_cashdesk.py",
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
-    environment:
-      - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local-lab2,service.name=the-cashdesk
   the-coffee-lover:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-lover

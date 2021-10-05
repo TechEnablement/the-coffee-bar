@@ -38,8 +38,8 @@ exporters:
     endpoint: jaeger:14250
     insecure: true
   otlphttp:
-    traces_endpoint: "https://endpoint6.collection.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV35TmELUPgEOOXzvA_Kk0SsxDDdn7AUmj7E-GID5Vx14283D89hzXxdSMeL0Yu3909l5Kn_fEWr4QQlFX8vYJgSNQ8jc970A-TjPKBnWNp6Ng=="
-
+    traces_endpoint: 
+    
 service:
   extensions: [health_check]
   pipelines:
