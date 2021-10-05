@@ -69,7 +69,6 @@ services:
     ports:
       - 8084:8084
     command: ["opentelemetry-instrument", "python3", "src/bin/the_cashdesk.py",
-    #command: ["python3", "src/bin/the_cashdesk.py",
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
     environment:
