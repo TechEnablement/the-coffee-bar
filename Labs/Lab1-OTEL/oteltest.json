@@ -1,0 +1,22 @@
+[{
+        "id": "12145adb1abe2cb",
+        "duration": 18131000,
+        "kind": "SERVER",
+        "localEndpoint": {
+            "serviceName": "OGRADY Service",
+            "ipv4": "192.168.0.15",
+            "port": 3306
+        },
+        "name": "E2E-span",
+        "remoteEndpoint": {
+            "ipv4": "172.19.0.80",
+            "port": 58648
+        },
+        "tags": {
+            "http.status_code": "500",
+            "try": "2"
+        },
+        "timestamp": 1634133795000000,
+        "traceId": "291a12aaa3ab64d"
+}
+]
